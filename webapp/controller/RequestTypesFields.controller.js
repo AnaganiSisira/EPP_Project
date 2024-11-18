@@ -5,25 +5,37 @@ sap.ui.define([
 ],
     function (Controller, MessageToast, MessageBox) {
         "use strict";
- 
+
         return Controller.extend("eppresquesttypes.controller.RequestTypesFields", {
             onInit: function () {
- 
+                // Create a JSON model to track edit mode
+                var oEditModeModel = new sap.ui.model.json.JSONModel({
+                    editMode: false // Default to display mode
+                });
+                this.getView().setModel(oEditModeModel, "viewModel");
+
+
+            },
+            onToggleEditMode: function () {
+                // Toggle the edit mode
+                var oModel = this.getView().getModel("viewModel");
+                var bEditMode = oModel.getProperty("/editMode");
+                oModel.setProperty("/editMode", !bEditMode);
             },
             onClickAddButton: function () {
                 this.byId("addDialogRequestTypeFieldNew").open();
             },
- 
+
             onSaveRequestTypeFields: function () {
                 try {
- 
+
                     var oTable = this.getView().byId("requestTypeFieldsTable");
- 
+
                     if (!oTable) {
                         throw new Error("Table not found");
                     }
                     var oBinding = oTable.getBinding("rows");
- 
+
                     if (!oBinding) {
                         throw new Error("Table binding not found");
                     }
@@ -33,41 +45,41 @@ sap.ui.define([
                         throw new Error("Model not found");
                     }
                     aItems.forEach(function (oItemContext) {
- 
+
                         var oData = oItemContext.getObject();
                         oData.isDisplay = oData.isDisplay ? true : false;
                         oData.isRequired = oData.isRequired ? true : false;
- 
+
                     });
- 
+
                     MessageToast.show("Data saved successfully");
                 } catch (error) {
- 
+
                     MessageToast.show("Error: " + error.message);
                     console.error("Error during save operation:", error);
                 }
             },
- 
+
             onSaveRequestTypeFieldsNew: function () {
                 console.log("onSaveRequestTypeFieldsNew called");
- 
+
                 var oComboBox = this.byId("idNewRequestTypeFieldComboBox");
                 var oInputField = this.byId("idNewRequestTypefieldMaintenanceComboBox");
                 var requestTypeId = oComboBox.getSelectedKey();
                 var fieldValue = oInputField.getSelectedKey();
-               
+
                 if (!requestTypeId || !fieldValue) {
                     MessageBox.error("Please fill all required fields.");
                     return;
                 }
- 
+
                 var oPayload = {
                     requestType_ID: requestTypeId,
                     fieldMaintenance_ID: fieldValue
                 };
                 console.log("Payload:", oPayload);
                 try {
- 
+
                     var oModel = this.getView().getModel();
                     var sPath = "/RequestConfigs";
                     var oContext = oModel.bindList(sPath).create(oPayload);
@@ -87,16 +99,16 @@ sap.ui.define([
                     MessageBox.error("An unexpected error occurred while saving the Request Type Field.");
                 }
             },
- 
+
             _refreshTable: function () {
                 console.log("Refreshing table");
- 
+
                 try {
                     var oModel = this.getView().getModel();
                     oModel.refresh();
                     var oTable = this.byId("requestTypeFieldsTable");
                     var oBinding = oTable.getBinding("rows");
- 
+
                     if (oBinding) {
                         oBinding.refresh();
                         console.log("Table binding refreshed");
@@ -106,7 +118,7 @@ sap.ui.define([
                     MessageBox.error("An error occurred while refreshing the table.");
                 }
             },
- 
+
             onCloseRequestTypeFieldsNew: function () {
                 try {
                     this.byId("addDialogRequestTypeFieldNew").close();
@@ -116,7 +128,7 @@ sap.ui.define([
                     MessageBox.error("An error occurred while closing the dialog.");
                 }
             },
- 
+
             onClearRequestTypeFields: function () {
                 try {
                     this.byId("idNewRequestTypeFieldComboBox").setSelectedKey("");
@@ -126,15 +138,15 @@ sap.ui.define([
                     MessageBox.error("An error occurred while clearing the input fields.");
                 }
             },
- 
+
             onSearchRequestTypeFields: function () {
                 var oView = this.getView(),
                     sValue = oView.byId("requestTypeFieldsSearchField").getValue().toLowerCase();
                 var oTable = oView.byId("requestTypeFieldsTable");
                 var oBinding = oTable.getBinding("rows");
- 
+
                 var oIsActiveFilter = new sap.ui.model.Filter("requestType/isActive", sap.ui.model.FilterOperator.EQ, true);
- 
+
                 var aSearchFilters = [];
                 if (sValue) {
                     aSearchFilters.push(
@@ -157,12 +169,12 @@ sap.ui.define([
                         })
                     );
                 }
- 
+
                 var aCombinedFilters = [oIsActiveFilter];
                 if (aSearchFilters.length) {
                     aCombinedFilters.push(new sap.ui.model.Filter(aSearchFilters, true));
                 }
- 
+
                 oBinding.filter(aCombinedFilters, sap.ui.model.FilterType.Application);
             },
 
@@ -171,25 +183,25 @@ sap.ui.define([
             //     try {
             //         // Get the new state of the switch
             //         var bState = oEvent.getParameter("state");
-            
+
             //         // Get the binding context of the switch
             //         var oContext = oEvent.getSource().getBindingContext();
-            
+
             //         // Ensure the context is valid
             //         if (!oContext) {
             //             sap.m.MessageBox.error("No binding context found for the toggle switch.");
             //             return;
             //         }
-            
+
             //         // Get the model and binding path
             //         var oModel = oContext.getModel();
             //         var sPath = oContext.getPath();
-            
+
             //         // Prepare the payload for the update
             //         var oPayload = {
             //             isActive: bState
             //         };
-            
+
             //         // Call the update method on the OData model
             //         oModel.update(sPath, oPayload, { groupId: "updateGroup" })
             //             .then(function () {
@@ -202,8 +214,8 @@ sap.ui.define([
             //         console.log("An unexpected error occurred: " + error.message);
             //     }
             // },
-            
- 
- 
+
+
+
         });
     });

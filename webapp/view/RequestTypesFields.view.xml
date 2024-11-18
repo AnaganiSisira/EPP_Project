@@ -40,6 +40,12 @@
             press="onClickExportButton"
             visible="false"
         />
+        <Button
+    text="Edit"
+    icon="sap-icon://edit"
+    press="onToggleEditMode"
+/>
+
     </Toolbar>
  
     <table:Table
@@ -103,6 +109,7 @@
             customTextOn="On"
             customTextOff="Off"
             change="onToggleActive"
+              enabled="{= ${editMode} }"
         />
                 </table:template>
             </table:Column>
@@ -117,8 +124,9 @@
             customTextOn="On"
             customTextOff="Off"
             change="onToggleActive"
+            enabled="{= ${editMode} }"
         />
-                </table:template>
+                </table:template> 
             </table:Column>
         </table:columns>
     </table:Table>

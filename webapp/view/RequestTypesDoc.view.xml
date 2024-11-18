@@ -50,6 +50,12 @@
             press="onExport"
             visible="false"
         />
+            <Button
+        icon="sap-icon://edit"
+        tooltip="Edit"
+        class="editButton"
+        press="onEditTable"
+    />
     </Toolbar>
  
     <VBox class="pageWrapper">
