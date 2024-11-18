@@ -1,0 +1,224 @@
+<mvc:View
+    controllerName="eppresquesttypes.controller.RequestTypesDoc"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:m="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:svm="sap.ui.comp.smartvariants"
+    xmlns:table="sap.ui.table"
+    xmlns:rowmodes="sap.ui.table.rowmodes"
+    xmlns:u="sap.ui.unified"
+    height="100%"
+>
+    <Toolbar class="subHeader">
+        <ToolbarSpacer />
+ 
+        <SearchField
+            id="requestTypeDocSearchField"
+            placeholder="Search..."
+            liveChange=".onSearchRequestTypeDoc"
+            width="20%"
+        />
+ 
+        <Button
+            icon="sap-icon://add"
+            tooltip="Add"
+            class="addButton"
+            press="addDialogNewDoc"
+        />
+        <Button
+            id="docEditButton"
+            icon="{= ${viewModel>/isEditMode} ? 'sap-icon://display' : 'sap-icon://edit'}"
+            tooltip="{= ${viewModel>/isEditMode} ? 'Switch to View Mode' : 'Switch to Edit Mode'}"
+            press="onEditToggle"
+            type="Transparent"
+        />
+        <Button
+            icon="sap-icon://delete"
+            tooltip="delete"
+            class="deleteButton"
+            press="onDocDeleteButton"
+            visible="false"
+        />
+        <Button
+            icon="sap-icon://download"
+            tooltip="download"
+            class="downloadButton"
+            press="onExport"
+            visible="false"
+        />
+    </Toolbar>
+ 
+    <VBox class="pageWrapper">
+        <table:Table
+            class="RequestTable"
+            id="requestTypeDocTable"
+            enableBusyIndicator="true"
+            selectionMode="MultiToggle"
+            rows="{
+            path: 'DocsConfigModel>/DocumentsConfig',
+            parameters: {
+                expand: 'requestType',
+                select: 'ID,attribute,isDisplay,isRequired,requestType_ID,requestType/*'
+            },
+            filters: [{
+                path: 'requestType/isActive',
+                operator: 'EQ',
+                value1: true
+            }],
+            sorter: {
+                path: 'requestType/requestName',
+                descending: false
+            }
+        }"
+            ariaLabelledBy="title"
+        >
+            <table:rowMode>
+                <rowmodes:Fixed rowCount="13" />
+            </table:rowMode>
+            <table:columns>
+                <table:Column id="Active">
+                    <m:Label text="Request Type" />
+                    <table:template>
+                        <m:Text
+                            text="{DocsConfigModel>requestType/requestName}"
+                            wrapping="false"
+                        />
+                    </table:template>
+                </table:Column>
+ 
+                <table:Column id="HelpText">
+                    <Label text="Fields" />
+                    <table:template>
+                        <HBox>
+                            <Input
+                                value="{DocsConfigModel>attribute}"
+                                editable="{viewModel>/isEditMode}"
+                                visible="{= ${viewModel>/isEditMode} }"
+                                class="fullWidthInput"
+                            />
+                            <Text
+                                text="{DocsConfigModel>attribute}"
+                                visible="{= !${viewModel>/isEditMode} }"
+                            />
+                        </HBox>
+                    </table:template>
+                </table:Column>
+ 
+                <table:Column id="HelpT">
+                    <Label text="Display" />
+                    <table:template>
+                        <!-- <CheckBox selected="{DocsConfigModel>isDisplay}" /> -->
+
+                                    <m:Switch
+            state="{DocsConfigModel>isDisplay}"
+            customTextOn="On"
+            customTextOff="Off"
+            change="onToggleActive"
+        />
+                    </table:template>
+                </table:Column>
+ 
+                <table:Column id="Help">
+                    <Label text="Required" />
+                    <table:template>
+                       
+                                    <m:Switch
+            state="{DocsConfigModel>isRequired}"
+            customTextOn="On"
+            customTextOff="Off"
+            change="onToggleActive"
+        />
+                    </table:template>
+                </table:Column>
+            </table:columns>
+        </table:Table>
+    </VBox>
+ 
+    <Dialog
+        id="addDialogNewDoc"
+        stretch="false"
+    >
+        <customHeader>
+            <Toolbar>
+                <Title text="Add New RequestType Document Fields" />
+                <ToolbarSpacer />
+                <Button
+                    icon="sap-icon://decline"
+                    press="onCloseDocDialog"
+                    tooltip="Close"
+                />
+            </Toolbar>
+        </customHeader>
+        <content>
+            <VBox class="adminScreenActions">
+                <Label
+                    text="RequestType:"
+                    required="true"
+                />
+                <ComboBox
+                    id="idNewRequestTypeDocComboBox"
+                    width="300px"
+                    placeholder="Select Request Type"
+                    items="{
+                        path: '/RequestTypes'
+                       
+                }"
+                >
+                    <core:Item
+                        key="{ID}"
+                        text="{requestName}"
+                    />
+                </ComboBox>
+ 
+                <Label
+                    text="Field:"
+                    required="true"
+                />
+                <Input
+                    width="300px"
+                    value=""
+                    id="idRequestTYpeDocNewField"
+                />
+            </VBox>
+        </content>
+ 
+        <beginButton>
+            <Button
+                text="Submit"
+                tooltip="Submit"
+                 type="Emphasized"
+                press="onClickAddNewDocFieldButton"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                text="Clear"
+                tooltip="Clear"
+                press="onClearDialog"
+            />
+        </endButton>
+    </Dialog>
+ 
+     <Toolbar class="stickyFooter">
+        <ToolbarSpacer />
+        <content>
+            <HBox class="footerButtons">
+                <Button
+                    text="Save"
+                    press="onSaveRequestTypeDocFieldsNew"
+                    tooltip="Save"
+                     type="Emphasized"
+                />
+                <Button
+                    text="Cancel"
+                    tooltip="Cancel"
+                     type="Reject"
+                />
+            </HBox>
+        </content>
+    </Toolbar>
+</mvc:View>

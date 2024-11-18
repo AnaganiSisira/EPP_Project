@@ -1,0 +1,215 @@
+<mvc:View
+    controllerName="eppresquesttypes.controller.RequestTypesFields"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    displayBlock="true"
+    xmlns:m="sap.m"
+    xmlns:table="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:rowmodes="sap.ui.table.rowmodes"
+    height="100%"
+>
+    <Toolbar class="subHeader">
+        <ToolbarSpacer />
+ 
+        <SearchField
+            id="requestTypeFieldsSearchField"
+            placeholder="Search..."
+            liveChange=".onSearchRequestTypeFields"
+            width="20%"
+        />
+ 
+        <Button
+            icon="sap-icon://add"
+            tooltip="Add"
+            class="addButton"
+            press="onClickAddButton"
+        />
+        <Button
+            icon="sap-icon://delete"
+            tooltip="delete"
+            class="deleteButton"
+            press="onClickDeleteButton"
+            visible="false"
+        />
+        <Button
+            icon="sap-icon://download"
+            tooltip="onExport"
+            class="onExportButton"
+            press="onClickExportButton"
+            visible="false"
+        />
+    </Toolbar>
+ 
+    <table:Table
+        class="RequestTable"
+        id="requestTypeFieldsTable"
+        selectionMode="MultiToggle"
+        rows="{
+        path: '/RequestConfigs',
+        parameters: {
+       
+            expand: 'requestType',
+            select: 'ID,attribute,isDisplay,isRequired,requestType_ID,requestType/*'
+        },
+        filters: [{
+            path: 'requestType/isActive',
+            operator: 'EQ',
+            value1: true
+        }],
+         sorter: {
+            path: 'requestType/requestName',
+            descending: false
+        }
+    }"
+        enableBusyIndicator="true"
+        ariaLabelledBy="title"
+        sort="{RequestTypes/requestName}"
+    >
+        <table:rowMode>
+            <rowmodes:Fixed rowCount="13" />
+        </table:rowMode>
+ 
+        <table:columns>
+            <table:Column id="RequestTypeFields">
+                <Label text="Request Type" />
+                <table:template>
+                    <m:Text
+                        text="{requestType/requestName}"
+                        wrapping="false"
+                    />
+                </table:template>
+            </table:Column>
+ 
+ 
+            <table:Column id="idReuestTypeFieldHelpText">
+                <Label text="Fields" />
+                <table:template>
+                    <m:Text
+                        text="{fieldMaintenance/lineItem}"
+                        wrapping="false"
+                    />
+                </table:template>
+            </table:Column>
+ 
+            <table:Column id="idReuestTypeFieldHelpTextA">
+                <Label text="Display" />
+                <table:template>
+                    <!-- <m:CheckBox selected="{isDisplay}" /> -->
+
+                       <m:Switch
+            state="{isDisplay}"
+            customTextOn="On"
+            customTextOff="Off"
+            change="onToggleActive"
+        />
+                </table:template>
+            </table:Column>
+ 
+            <table:Column id="idReuestTypeFieldHelp">
+                <Label text="Required" />
+                <table:template>
+                    <!-- <m:CheckBox selected="{isRequired}" /> -->
+
+     <m:Switch
+            state="{isRequired}"
+            customTextOn="On"
+            customTextOff="Off"
+            change="onToggleActive"
+        />
+                </table:template>
+            </table:Column>
+        </table:columns>
+    </table:Table>
+ 
+    <Dialog
+        id="addDialogRequestTypeFieldNew"
+        stretch="false"
+        afterClose="onDialogClose"
+    >
+        <customHeader>
+            <Toolbar>
+                <Title text="Add New RequestTypeFields" />
+                <ToolbarSpacer />
+                <Button
+                    icon="sap-icon://decline"
+                    press="onCloseRequestTypeFieldsNew"
+                    tooltip="Close"
+                />
+            </Toolbar>
+        </customHeader>
+        <content>
+            <VBox class="adminScreenActions">
+                <Label text="RequestType:" required="true" />
+                <ComboBox
+                    width="300px"
+                    id="idNewRequestTypeFieldComboBox"
+                    placeholder="Select Request Type"
+                    items="{
+        path: '/RequestTypes',
+        sorter: { path: 'requestName' },
+        filters: [{ path: 'isActive', operator: 'EQ', value1: true }]
+    }"
+                >
+                    <core:Item
+                        key="{ID}"
+                        text="{requestName}"
+                    />
+                </ComboBox>
+ 
+                <Label text="Field:" required="true" />
+                <ComboBox
+                    width="300px"
+                    id="idNewRequestTypefieldMaintenanceComboBox"
+                    placeholder="Select Line Items"
+                    items="{
+                        path: '/FieldMaintenance'
+                       
+                       
+                }"
+                >
+                    <core:Item
+                        key="{ID}"
+                        text="{lineItem}"
+                    />
+                </ComboBox>
+            </VBox>
+        </content>
+ 
+        <beginButton>
+            <Button
+                text="Submit"
+                tooltip="Submit"
+                 type="Emphasized"
+                press="onSaveRequestTypeFieldsNew"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                text="Clear"
+                tooltip="Clear"
+                press="onClearRequestTypeFields"
+            />
+        </endButton>
+    </Dialog>
+ 
+     <Toolbar class="stickyFooter">
+        <ToolbarSpacer />
+        <content>
+            <HBox class="footerButtons">
+                <Button
+                    text="Save"
+                    tooltip="Save"
+                    press="onSaveRequestTypeFields"
+                     type="Emphasized"
+                />
+                <Button
+                    text="Cancel"
+                    tooltip="Cancel"
+                     type="Reject"
+                />
+            </HBox>
+        </content>
+    </Toolbar>
+</mvc:View>

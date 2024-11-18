@@ -1,0 +1,245 @@
+<mvc:View
+    controllerName="eppresquesttypes.controller.RequestTypes"
+  xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:m="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:svm="sap.ui.comp.smartvariants"
+    xmlns:table="sap.ui.table"
+    xmlns:rowmodes="sap.ui.table.rowmodes"
+    xmlns:u="sap.ui.unified"
+>
+
+ <IconTabBar
+            id="idIconTabBarNoIconss"
+            expandable="true"
+            expanded="{device>/isNoPhone}"
+            class="sapUiResponsiveContentPadding iconTabBar"
+        >
+ 
+            <items>
+                <IconTabFilter
+                    text="Request Types"
+                    key="info"
+                    tooltip="RequestTypes"
+                    icon="sap-icon://request"
+                    iconColor="Default"
+                    count="{/RequestTypes/$count}"
+                >
+
+                    <table:Table
+                class="RequestTable"
+                id="requestTypesTable"
+                selectionMode="MultiToggle"
+                rows="{/RequestTypes}"
+                ariaLabelledBy="title"
+            >
+                <table:rowMode>
+                    <rowmodes:Fixed rowCount="14" />
+                </table:rowMode>
+                <table:columns>
+                    <table:Column                                                                                                                  
+                        width="20rem"
+                        id="requestTypesRequestType"
+                            hAlign="Center"
+                    >
+                        <Label text="IntakeRequestType" />
+                         
+                         <table:template>
+                            <HBox>
+                                <Input
+                                    value="{requestName}"
+                                    editable="{viewModel>/isEditMode}"
+                                    visible="{= ${viewModel>/isEditMode} }"
+                                    class="fullWidthInput"
+                                />
+                                <Text
+                                    text="{requestName}"
+                                    visible="{= !${viewModel>/isEditMode} }"
+                                />
+                            </HBox>
+                        </table:template>
+                    </table:Column>
+ 
+                    <table:Column
+                        width="7rem"
+                        id="requestTypesActive"
+                        hAlign="Center"
+                    >
+                        <m:Label text="ACTIVE" />
+   <table:template>
+        <m:Switch
+            state="{isActive}"
+            customTextOn="On"
+            customTextOff="Off"
+            change="onToggleActive"
+        />
+    </table:template>
+ 
+                    </table:Column>
+ 
+ 
+                      <table:Column  width="7rem" id="requestTypesSLA"
+                        hAlign="Center">
+                        <Label text="SLA" />
+                          <table:template>
+                            <HBox>
+                                <Input
+                                    value="{sla}"
+                                    editable="{viewModel>/isEditMode}"
+                                    visible="{= ${viewModel>/isEditMode} }"
+                                    class="slaWidthInput"
+                                />
+                                <Text
+                                    text="{sla}"
+                                    visible="{= !${viewModel>/isEditMode} }"
+                                />
+                            </HBox>
+                        </table:template>
+                    </table:Column>
+ 
+                    <table:Column id="requestTypesHelpText"
+                        hAlign="Center">
+                        <Label text="HelpText" />
+                        <table:template>
+        <HBox>
+            <Input
+                value="{description}"
+                editable="{viewModel>/isEditMode}"
+                visible="{= ${viewModel>/isEditMode} }"
+                class="helpWidthInput"
+            />
+            <Text
+                text="{description}"
+                visible="{= !${viewModel>/isEditMode} }"
+                tooltip="{description}"
+                wrapping="false"
+            />
+        </HBox>
+                        </table:template>
+                    </table:Column>
+ 
+                    <table:Column id="requestTypesLink"
+                        hAlign="Center">
+                        <Label text="Link" />
+                         <table:template>
+                            <HBox>
+                                <Input
+                                    value="{link}"
+                                    editable="{viewModel>/isEditMode}"
+                                    visible="{= ${viewModel>/isEditMode} }"
+                                    class="linkWidthInput"
+                                />
+                                <Text
+                                    text="{link}"
+                                    visible="{= !${viewModel>/isEditMode} }"
+                                />
+                            </HBox>
+                        </table:template>
+                    </table:Column>
+                </table:columns>
+            </table:Table>
+       
+ 
+       
+          <Toolbar class="stickyFooter">
+        <ToolbarSpacer />
+        <content>
+            <HBox class="footer">
+                <Button  id="requestTypesSaveButton"
+                    type="Accept"
+                    text="Save"
+                    press="onsave"
+                   
+                />
+                <Button
+                    type="Reject"
+                    text="Cancel"
+                    press="oncancel"
+                />
+           </HBox>
+        </content>
+    </Toolbar>
+        
+    
+ 
+    <!-- Delete Confirmation Dialog -->
+    <Dialog
+        id="requestTypesDeleteConfirmDialog"
+        title="Delete Confirmation"
+        type="Message"
+    >
+        <Text text="Are you sure you want to delete the selected rows?" />
+        <beginButton>
+            <Button
+                text="Yes"
+                press="onConfirmDelete"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                text="No"
+                press="onCancelDelete"
+            />
+        </endButton>
+    </Dialog>
+                  
+                </IconTabFilter>
+ 
+               
+                <IconTabFilter
+                    text="Field Maintenance"
+                    tooltip="FieldMaintenance"
+                    key="people"
+                    icon="sap-icon://customize"
+                    iconColor="Default"
+                    count="{/FieldMaintenance/$count}"
+                >
+                   
+
+
+
+
+                </IconTabFilter>
+ 
+ 
+                <IconTabFilter
+                    text="Request Type Fields"
+                    tooltip="RequestTypeFields"
+                    key="attachments"
+                    icon="sap-icon://form"
+                    iconColor="Default"
+                    count="{/RequestConfigs/$count}"
+                    
+                >
+                    <mvc:XMLView
+                        viewName="eppresquesttypes.view.RequestTypesFields"
+                    />
+                </IconTabFilter>
+ 
+                <IconTabFilter
+                    text="Documents"
+                    tooltip="Documents"
+                    key="notes"
+                    icon="sap-icon://documents"
+                    iconColor="Default"
+                    count="{/DocumentsConfig/$count}"
+                >
+
+                           <mvc:XMLView
+                        viewName="eppresquesttypes.view.RequestTypesDoc"
+                    />
+                   
+                </IconTabFilter>
+ 
+            </items>
+        </IconTabBar>
+ 
+ 
+   
+   
+
+</mvc:View>
