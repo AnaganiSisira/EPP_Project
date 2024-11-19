@@ -265,6 +265,32 @@ sap.ui.define([
                 console.log("An unexpected error occurred: " + error.message);
             }
         },
+
+        onToggleExpand: function () {
+            var oViewModel = this.getView().getModel("viewModel");
+            var bIsExpanded = oViewModel.getProperty("/isExpanded");
+            oViewModel.setProperty("/isExpanded", !bIsExpanded);
+        },
+        
+        onToggleExpand: function (oEvent) {
+            var oViewModel = this.getView().getModel("viewModel");
+            var bIsExpanded = oViewModel.getProperty("/isExpanded");
+        
+            // Toggle the state
+            oViewModel.setProperty("/isExpanded", !bIsExpanded);
+        
+            // Dynamically resize the column (optional, based on content)
+            var oColumn = this.byId("RQHelpText");
+            if (!bIsExpanded) {
+                // Expand
+                oColumn.setWidth("auto"); // Let the column expand to fit content
+            } else {
+                // Collapse
+                oColumn.setWidth("150px"); // Reset to a smaller default width
+            }
+        },
+        
+        
         
         
 

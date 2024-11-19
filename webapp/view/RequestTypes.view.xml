@@ -79,9 +79,7 @@
         />
     </table:template>
  
-                    </table:Column>
- 
- 
+                 </table:Column>
                       <table:Column  width="7rem" id="requestTypesSLA"
                         hAlign="Center">
                         <Label text="SLA" />
@@ -101,7 +99,7 @@
                         </table:template>
                     </table:Column>
  
-                    <table:Column id="requestTypesHelpText"
+                    <!-- <table:Column id="requestTypesHelpText"
                         hAlign="Center">
                         <Label text="HelpText" />
                         <table:template>
@@ -120,7 +118,38 @@
             />
         </HBox>
                         </table:template>
-                    </table:Column>
+                    </table:Column> -->
+
+                   <table:Column id="RQHelpText" hAlign="Center">
+    <Label text="HelpText" />
+    <table:template>
+        <HBox class="helpTextContainer">
+            <!-- Input Field -->
+            <Input width="100px"
+                value="{description}"
+                editable="{viewModel>/isEditMode}"
+                visible="{= ${viewModel>/isEditMode} }"
+                class="helpWidthInput"
+            />
+
+            <!-- Dynamic Text -->
+            <VBox class="helpTextWrapper" visible="{= !${viewModel>/isEditMode} }">
+                <Text
+                    text="{= ${viewModel>/isExpanded} ? ${description} : ${description}.substring(0, 50) + '...'}"
+                    wrapping="true"
+                    class="dynamicHelpText"
+                />
+                <Button
+                    text="{= ${viewModel>/isExpanded} ? 'Show Less' : 'Show More' }"
+                    press="onToggleExpand"
+                    type="Transparent"
+                    class="toggleButton"
+                />
+            </VBox>
+        </HBox>
+    </table:template>
+</table:Column>
+
  
                     <table:Column id="requestTypesLink"
                         hAlign="Center">

@@ -8,19 +8,8 @@ sap.ui.define([
 
         return Controller.extend("eppresquesttypes.controller.RequestTypesFields", {
             onInit: function () {
-                // Create a JSON model to track edit mode
-                var oEditModeModel = new sap.ui.model.json.JSONModel({
-                    editMode: false // Default to display mode
-                });
-                this.getView().setModel(oEditModeModel, "viewModel");
+               
 
-
-            },
-            onToggleEditMode: function () {
-                // Toggle the edit mode
-                var oModel = this.getView().getModel("viewModel");
-                var bEditMode = oModel.getProperty("/editMode");
-                oModel.setProperty("/editMode", !bEditMode);
             },
             onClickAddButton: function () {
                 this.byId("addDialogRequestTypeFieldNew").open();
@@ -75,7 +64,8 @@ sap.ui.define([
 
                 var oPayload = {
                     requestType_ID: requestTypeId,
-                    fieldMaintenance_ID: fieldValue
+                    fieldMaintenance_ID: fieldValue,
+                    attribute:fieldValue
                 };
                 console.log("Payload:", oPayload);
                 try {

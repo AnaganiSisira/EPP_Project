@@ -50,12 +50,7 @@
             press="onExport"
             visible="false"
         />
-            <Button
-        icon="sap-icon://edit"
-        tooltip="Edit"
-        class="editButton"
-        press="onEditTable"
-    />
+           
     </Toolbar>
  
     <VBox class="pageWrapper">
@@ -119,7 +114,7 @@
                     <table:template>
                         <!-- <CheckBox selected="{DocsConfigModel>isDisplay}" /> -->
 
-                                    <m:Switch
+        <m:Switch
             state="{DocsConfigModel>isDisplay}"
             customTextOn="On"
             customTextOff="Off"

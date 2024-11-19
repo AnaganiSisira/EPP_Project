@@ -30,4 +30,42 @@
     float: right;
 }
 
+/* Container spacing */
+.helpTextContainer {
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Distribute space */
+    width: 100%;
+}
+
+/* Text and button wrapper for clean layout */
+.helpTextWrapper {
+    display: flex;
+    flex-direction: column; /* Stack the text and button */
+    gap: 5px; /* Spacing between text and button */
+}
+
+/* Dynamic text styling */
+.dynamicHelpText {
+    transition: all 0.3s ease; /* Smooth transition for text changes */
+    max-height: 100px; /* Prevent overflow for long text */
+    overflow: hidden;
+    white-space: pre-wrap; /* Ensure proper wrapping */
+}
+
+/* Toggle button styling */
+.toggleButton {
+    color: #007bff; /* Subtle blue color */
+    font-size: 12px; /* Smaller text */
+    font-weight: bold;
+    text-align: left;
+    padding: 0;
+}
+
+/* Optional hover effect for better UX */
+.toggleButton:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
 
