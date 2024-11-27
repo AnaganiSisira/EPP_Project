@@ -41,7 +41,7 @@ sap.ui.define([
 
         onExport: function () {
             try {
-                var oTable = this.getView().byId("requestTypesTable");
+                var oTable = this.getView().byId("requestTypeTable");
        
                 if (!oTable) {
                     sap.m.MessageToast.show("Table not found.");
@@ -88,35 +88,44 @@ sap.ui.define([
         createColumn: function (oTable) {
             try {
                 var aColumns = [];
-       
                 if (!oTable) {
                     sap.m.MessageToast.show("Table not found.");
                     return aColumns;
                 }
        
                 oTable.getColumns().forEach(function (oColumn) {
-                    var oTemplate = oColumn.getTemplate();
+                    var oTemplate = oColumn.getTemplate(); // Get the column's template
                     var sProperty = "";
+                    var sLabel = oColumn.getLabel().getText();
        
-                    if (oTemplate instanceof sap.m.Text || oTemplate instanceof sap.m.Label) {
-                        sProperty = oTemplate.getBindingPath("text");
+                    // Handle nested templates (e.g., HBox containing Input or Text)
+                    if (oTemplate instanceof sap.m.HBox) {
+                        var aItems = oTemplate.getItems(); // Get items inside HBox
+                        aItems.forEach(function (oItem) {
+                            if (oItem instanceof sap.m.Text || oItem instanceof sap.m.Label) {
+                                sProperty = oItem.getBindingPath("text");
+                            } else if (oItem instanceof sap.m.Input) {
+                                sProperty = oItem.getBindingPath("value");
+                            }
+                        });
                     } else if (oTemplate instanceof sap.m.Input) {
                         sProperty = oTemplate.getBindingPath("value");
                     } else if (oTemplate instanceof sap.m.CheckBox) {
                         sProperty = oTemplate.getBindingPath("selected");
+                    } else if (oTemplate instanceof sap.m.Text) {
+                        sProperty = oTemplate.getBindingPath("text");
                     }
        
                     if (sProperty) {
                         aColumns.push({
-                            label: oColumn.getLabel().getText(),
+                            label: sLabel,
                             property: sProperty,
-                            type: sap.ui.export.EdmType.String
+                            type: sap.ui.export.EdmType.String, // Export all as strings for simplicity
                         });
                     }
                 });
        
                 return aColumns;
-       
             } catch (oError) {
                 sap.m.MessageToast.show("Error occurred while creating columns.");
                 console.error("Column creation error:", oError);
@@ -266,31 +275,11 @@ sap.ui.define([
             }
         },
 
-        onToggleExpand: function () {
-            var oViewModel = this.getView().getModel("viewModel");
-            var bIsExpanded = oViewModel.getProperty("/isExpanded");
-            oViewModel.setProperty("/isExpanded", !bIsExpanded);
-        },
-        
-        onToggleExpand: function (oEvent) {
-            var oViewModel = this.getView().getModel("viewModel");
-            var bIsExpanded = oViewModel.getProperty("/isExpanded");
-        
-            // Toggle the state
-            oViewModel.setProperty("/isExpanded", !bIsExpanded);
-        
-            // Dynamically resize the column (optional, based on content)
-            var oColumn = this.byId("RQHelpText");
-            if (!bIsExpanded) {
-                // Expand
-                oColumn.setWidth("auto"); // Let the column expand to fit content
-            } else {
-                // Collapse
-                oColumn.setWidth("150px"); // Reset to a smaller default width
-            }
-        },
-        
-        
+          onToggleExpand: function () {
+                var oViewModel = this.getView().getModel("viewModel");
+                var bIsExpanded = oViewModel.getProperty("/isExpanded");
+                oViewModel.setProperty("/isExpanded", !bIsExpanded);
+            },
         
         
 

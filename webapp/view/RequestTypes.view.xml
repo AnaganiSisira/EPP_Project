@@ -29,6 +29,50 @@
                     iconColor="Default"
                     count="{/RequestTypes/$count}"
                 >
+                <Toolbar class="customMargin">
+           
+            <ToolbarSpacer />
+ 
+            <SearchField
+    id="searchField"
+    width="20%"
+    placeholder="Search for..."
+    search="onSearch"
+    liveChange="onLiveChange"
+/>
+                <Button  id="refreshButton"
+                    icon="sap-icon://refresh"
+                    tooltip="Refresh Data"
+                    press="onRefresh"
+                    type="Transparent"
+                />
+ 
+                <Button  id="addButton"
+                    icon="sap-icon://add"
+                    tooltip="Add New Data"
+                    press="onAdd"
+                    type="Transparent"
+                />
+                <Button  id="exportButton"
+                    icon="sap-icon://download"
+                    tooltip="Export to Excel"
+                    press="onExport"
+                    type="Transparent"
+                />
+                <Button
+            id="editButton"
+            icon="sap-icon://edit"
+            tooltip="Edit"
+            press="onEditToggle"
+            type="Transparent"
+        />
+                <Button  id="deleteButton"
+                    icon="sap-icon://delete"
+                    tooltip="Delete"
+                    type="Transparent"
+                    press="onDeleteRow"
+                />
+         </Toolbar>
 
                     <table:Table
                 class="RequestTable"
@@ -120,36 +164,37 @@
                         </table:template>
                     </table:Column> -->
 
-                   <table:Column id="RQHelpText" hAlign="Center">
-    <Label text="HelpText" />
-    <table:template>
-        <HBox class="helpTextContainer">
-            <!-- Input Field -->
-            <Input width="100px"
-                value="{description}"
-                editable="{viewModel>/isEditMode}"
-                visible="{= ${viewModel>/isEditMode} }"
-                class="helpWidthInput"
-            />
-
-            <!-- Dynamic Text -->
-            <VBox class="helpTextWrapper" visible="{= !${viewModel>/isEditMode} }">
-                <Text
-                    text="{= ${viewModel>/isExpanded} ? ${description} : ${description}.substring(0, 50) + '...'}"
-                    wrapping="true"
-                    class="dynamicHelpText"
-                />
-                <Button
-                    text="{= ${viewModel>/isExpanded} ? 'Show Less' : 'Show More' }"
-                    press="onToggleExpand"
-                    type="Transparent"
-                    class="toggleButton"
-                />
-            </VBox>
-        </HBox>
-    </table:template>
-</table:Column>
-
+                    <table:Column id="RQHelpText"
+                        hAlign="Center">
+                        <Label text="HelpText" />
+                        <table:template>
+                            <HBox>
+                                <Input width="100px"
+                                    value="{description}"
+                                    editable="{viewModel>/isEditMode}"
+                                    visible="{= ${viewModel>/isEditMode} }"
+                                    class="helpWidthInput"
+                                />
+ 
+                                     <Text
+            text="{= ${viewModel>/isExpanded} ? ${description} : ${description}.substring(0, 50) + '...'}"
+            visible="{= !${viewModel>/isEditMode} }"
+            wrapping="true"
+        />
+                                <!-- <Text
+                                    text="{description}"
+                                    visible="{= !${viewModel>/isEditMode} }"
+                                /> -->
+ 
+                                 <Button
+            text="{= ${viewModel>/isExpanded} ? 'Show Less' : 'Show More' }"
+            press="onToggleExpand"
+            visible="{= !${viewModel>/isEditMode} }"
+            type="Transparent"
+        />
+                            </HBox>
+                        </table:template>
+                    </table:Column>
  
                     <table:Column id="requestTypesLink"
                         hAlign="Center">
